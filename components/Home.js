@@ -1,40 +1,84 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import {Token} from '../resources/Token';
+import ModalSelector from 'react-native-modal-selector'
+import {getValidYears, getValidMakes, getValidModels, getGenericMarketValue} from 'carproof-data-apis';
 
-export default class App extends React.Component {
+export default class Home extends React.Component {
 
-  corrola = [
-    {x:2007,y:3337},
-    {x:2008,y:3881},
-    {x:2009,y:4476},
-    {x:2010,y:5935},
-    {x:2011,y:6956},
-    {x:2012,y:8164},
-    {x:2013,y:8579},
-    {x:2014,y:10032},
-    {x:2015,y:11989},
-    {x:2016,y:13063},
-    {x:2017,y:15750}
-  ]
+  constructor(props){
+    super(props);
 
+    this.year = 0
+    this.make = ""
+    this.model = ""
 
+    this.data = []
 
+    this.state = {
+      years: [],
+      models: [],
+      makes: []
+    }
+  }
 
+  componentWillMount(){
+    getValidYears(Token._webServiceToken, (years) => {
+      this.setState({years: years})
+    })
+  }
+
+  getData(i){
+    if(i >= 0){
+      getGenericMarketValue(Token._webServiceToken, 
+                            this.year--, 
+                            this.make,
+                            this.model,
+                            (data) => {
+                              this.data.push(data)
+                              this.getData(--i)
+                            },
+                            (err) => console.log(err)
+                          )
+    } else {
+      console.log(this.data)
+    }
+  }
 
   render() {
-    slopes=[]
-    console.log("Year: Value")
-    for(i=0;i<this.corrola.length;i++) {
-        console.log(this.corrola[i].x +": " + this.corrola[i].y)
-        // slopes[i]=this.corrola[i+1].y
-        // console.log(slopes[i])
-    }
-
-    console.log("Slopes:")
 
     return (
       <View style={styles.container}>
-        <Text>Home</Text>
+        <ModalSelector
+          data={this.state.years}
+          initValue="Select an year"
+          keyExtractor= {item => item}
+          labelExtractor= {item => item}
+          onChange={(label) => {
+            this.year = label
+            getValidMakes(Token._webServiceToken, this.year, (makes) => this.setState({makes: makes}), (err) => console.log(err))
+          }}
+        />
+        <ModalSelector
+          data={this.state.makes}
+          initValue="Select a make"
+          keyExtractor= {item => item}
+          labelExtractor= {item => item}
+          onChange={(label) => {
+            this.make = label
+            getValidModels(Token._webServiceToken, this.year, this.make, (models) => this.setState({models: models}), (err) => console.log(err))
+          }}
+        />
+        <ModalSelector
+          data={this.state.models}
+          initValue="Select a model"
+          keyExtractor= {item => item}
+          labelExtractor= {item => item}
+          onChange={(label) => {
+            this.model = label
+            this.getData(10)
+          }}
+        />
       </View>
     );
   }

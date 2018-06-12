@@ -218,6 +218,7 @@ export const getValidMakes = (token, year, onSuccess, onFailure) => {
             json = JSON.parse(xmlhttp.responseText)
             onSuccess(json)
         } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
+            console.log(xmlhttp);
             onFailure(xmlhttp)
         }
       }).bind(this)
@@ -247,7 +248,7 @@ export const getValidModels = (token, year, make, onSuccess, onFailure) => {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             json = JSON.parse(xmlhttp.responseText)
             onSuccess(json)
-        } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
+        } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){            
             onFailure(xmlhttp)
         }
       }).bind(this)
@@ -279,7 +280,7 @@ export const getGenericMarketValue = (token, year, make, model, onSuccess, onFai
     xmlhttp.onreadystatechange = (function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             json = JSON.parse(xmlhttp.responseText)
-            onSuccess([json.VehicleYear, json.RetailGenericMarketValue])
+            onSuccess({year: json.VehicleYear, price: json.RetailGenericMarketValue})
         } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
             onFailure(xmlhttp)
         }
