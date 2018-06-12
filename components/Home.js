@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, Button, View } from 'react-native';
 import {Token} from '../resources/Token';
 import ModalSelector from 'react-native-modal-selector'
 import {getValidYears, getValidMakes, getValidModels, getGenericMarketValue} from 'carproof-data-apis';
 import {YearsToBuy} from '../math/Calculations';
+import PureChart from 'react-native-pure-chart';
 
 export default class Home extends React.Component {
 
@@ -19,7 +20,8 @@ export default class Home extends React.Component {
     this.state = {
       years: [],
       models: [],
-      makes: []
+      makes: [],
+      graph: []
     }
   }
 
@@ -42,15 +44,25 @@ export default class Home extends React.Component {
                             (err) => console.log(err)
                           )
     } else {
-      console.log(YearsToBuy(this.data))
+      //console.log(YearsToBuy(this.data))
+      this.makeGraphData()
     }
+  }
+
+  makeGraphData(){
+    var arr = this.data.reverse().map(x => ({x: x.year, y: x.price}))
+    this.setState({graph: arr})
   }
 
   render() {
 
     return (
       <View style={styles.container}>
+        <PureChart width={'100%'} height={200} data={this.state.graph} type='line' />
         <ModalSelector
+          disabled={this.state.years.length == 0 ? true : false}
+          style={styles.selector}
+          selectStyle={{borderWidth: 0}}
           data={this.state.years}
           initValue="Select an year"
           keyExtractor= {item => item}
@@ -61,6 +73,9 @@ export default class Home extends React.Component {
           }}
         />
         <ModalSelector
+          disabled={this.state.makes.length == 0 ? true : false}
+          style={styles.selector}
+          selectStyle={{borderWidth: 0}}
           data={this.state.makes}
           initValue="Select a make"
           keyExtractor= {item => item}
@@ -71,14 +86,21 @@ export default class Home extends React.Component {
           }}
         />
         <ModalSelector
+          disabled={this.state.years.models == 0 ? true : false}
+          style={styles.selector}
+          selectStyle={{borderWidth: 0}}
           data={this.state.models}
           initValue="Select a model"
           keyExtractor= {item => item}
           labelExtractor= {item => item}
           onChange={(label) => {
             this.model = label
-            this.getData(10)
           }}
+        />
+        <Button
+          style={{margin: 20}}
+          title='GO'
+          onPress={() => this.getData(10)}
         />
       </View>
     );
@@ -92,4 +114,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  selector : {
+    borderRadius: 15,
+    borderStyle: 'solid',
+    borderColor:'rgba(0, 0, 0, 0)',
+    height: 50,
+    paddingHorizontal: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    marginBottom: 20,
+    justifyContent: 'center'
+  }
 });
