@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import {Token} from '../resources/Token';
 import ModalSelector from 'react-native-modal-selector'
 import {getValidYears, getValidMakes, getValidModels, getGenericMarketValue} from 'carproof-data-apis';
+import {YearsToBuy} from '../math/Calculations';
 
 export default class Home extends React.Component {
 
@@ -41,7 +42,7 @@ export default class Home extends React.Component {
                             (err) => console.log(err)
                           )
     } else {
-      console.log(this.data)
+      console.log(YearsToBuy(this.data))
     }
   }
 
