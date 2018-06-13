@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import {Token} from '../resources/Token';
 import ModalSelector from 'react-native-modal-selector'
 import {getValidYears, getValidMakes, getValidModels, getGenericMarketValue} from 'carproof-data-apis';
@@ -40,7 +40,7 @@ export default class Home extends React.Component {
 
   getData(i){
     this.setState({loading: true})
-    if(i >= 0){
+    if(i >= 0 || this.newestYear-i < 2000){
       getGenericMarketValue(Token._webServiceToken, 
                             this.newestYear-i, 
                             this.make,
@@ -67,6 +67,18 @@ export default class Home extends React.Component {
     return Array.from(intersection);
   }
 
+  error(err){
+    this.setState({loading: false})
+    Alert.alert(
+      'Error',
+      err,
+      [
+        {text: 'Okay', onPress: () => null},
+      ],
+      { cancelable: true }
+    )
+  }
+
   makeGraphData(){
     var arr = this.data.reverse().map(x => ({x: x.year, y: x.price}))
     this.setState({graph: arr})
@@ -80,8 +92,8 @@ export default class Home extends React.Component {
           loading: false,
           makes: this.intersect(newMakes, oldMakes)
         })
-      }, (err) => console.log(err))
-    }, (err) => console.log(err))
+      }, (err) => this.error(err))
+    }, (err) => this.error(err))
   }
 
   getValidModelsForRange(newest, oldest){
@@ -92,8 +104,8 @@ export default class Home extends React.Component {
           loading: false,
           models: this.intersect(newModels, oldModels)
         })
-      }, (err) => console.log(err))
-    }, (err) => console.log(err))
+      }, (err) => this.error(err))
+    }, (err) => this.error(err))
   }
 
   render() {
@@ -129,7 +141,7 @@ export default class Home extends React.Component {
           labelExtractor= {item => item}
           onChange={(label) => {
             this.oldestYear = label
-            this.getValidMakesForRange(this.newestYear, this.oldestYear)
+            this.getValidMakesForRange(this.newestYear, this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000)
           }}
         />
         <ModalSelector
@@ -142,7 +154,7 @@ export default class Home extends React.Component {
           labelExtractor= {item => item}
           onChange={(label) => {
             this.make = label
-            this.getValidModelsForRange(this.newestYear, this.oldestYear)
+            this.getValidModelsForRange(this.newestYear, this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000)
           }}
         />
         <ModalSelector
@@ -157,7 +169,7 @@ export default class Home extends React.Component {
             this.model = label
           }}
         />
-        <TouchableOpacity onPress={() => this.getData(this.newestYear - this.oldestYear)} style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => this.getData(this.newestYear - (this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000))} style={styles.buttonContainer}>
           <Text style={styles.buttonText}>GO</Text>
         </TouchableOpacity>
       </View>
