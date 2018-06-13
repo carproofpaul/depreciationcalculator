@@ -50,16 +50,16 @@ export default class Display extends React.Component {
         <View style={{flex: 1, flexDirection: 'column'}}>
         <Card titleStyle={styles.cardHeader} title="BEST VALUE">
         <View>
-          <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.props.analysedData[0].year}</Text>
+          <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.list[0].year}</Text>
           <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.info.make} {this.props.info.model}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.props.analysedData[0].price}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.props.analysedData[0].percentage.toFixed(2)}% after 2 years</Text>
+          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.list[0].price}</Text>
+          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after 2 years</Text>
         </View>
         </Card>
 
          <Card titleStyle={styles.cardHeader} title="RUNNER UP">
         <View>
-          <Text style={{textAlign: 'center', fontSize:25, fontWeight: 'bold'}}>{this.props.analysedData[1].year}</Text>
+          <Text style={{textAlign: 'center', fontSize:25, fontWeight: 'bold'}}>{this.list[1].year}</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text><Icon name="shopping-cart"/> ${this.props.analysedData[1].price}</Text>
             <Text><Icon name="arrow-down"/> {this.props.analysedData[1].percentage.toFixed(2)}%</Text>
