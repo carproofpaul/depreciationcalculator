@@ -17,7 +17,7 @@ export const YearsToBuy = (carValues) => {
                 price : carValues[i].price,
                 percentage: 100-(carValues[i+2].price/carValues[i].price)*100,
             }
-            console.log(carValues[i+2]/carValues[i])
+
             }
             else if(carValues[i].year==2001) {
                 percentages[i] = {
@@ -28,8 +28,9 @@ export const YearsToBuy = (carValues) => {
             }
         }
 
-        //sort array by percentage
+        //sort array by percentage and set return object to years with the lowest percentages
         percentages = percentages.sort(function(a, b){return a.percentage - b.percentage})
+
 
     return (
         percentages
