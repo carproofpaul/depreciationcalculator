@@ -7,6 +7,7 @@ import Loader from './Loader';
 import {YearsToBuy} from '../math/Calculations';
 import PureChart from 'react-native-pure-chart';
 import Display from './Display';
+import {Icon, ListItem} from 'react-native-elements';
 
 const WIDTH = 300
 
