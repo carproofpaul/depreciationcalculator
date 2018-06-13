@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal } from 'react-native';
 import {Token} from '../resources/Token';
 import ModalSelector from 'react-native-modal-selector'
 import {getValidYears, getValidMakes, getValidModels, getGenericMarketValue} from 'carproof-data-apis';
 import Loader from './Loader';
 import {YearsToBuy} from '../math/Calculations';
 import PureChart from 'react-native-pure-chart';
+import Display from './Display';
 
 const WIDTH = 300
 
@@ -29,6 +30,7 @@ export default class Home extends React.Component {
       graph: [],
 
       loading: false,
+      visible: false
     }
   }
 
@@ -52,10 +54,8 @@ export default class Home extends React.Component {
                             (err) => console.log(err)
                           )
     } else {
-      this.setState({loading: false})
       console.log(this.data)
-      //console.log(YearsToBuy(this.data))
-      //this.makeGraphData()
+      this.setState({loading: false, visible: true})
       this.data = [] //clear incase they do it again
     }
   }
@@ -109,6 +109,20 @@ export default class Home extends React.Component {
   }
 
   render() {
+
+    if(this.state.visible){
+      return(
+        <Modal
+          transparent={false}
+          visible={true}
+          onRequestClose={() => this.setState({visible: false})}>
+            <Display 
+              onClose={() => this.setState({visible: false})}
+              data={this.data} 
+            />
+        </Modal>
+      )
+    }
 
     return (
       <View style={styles.container}>
