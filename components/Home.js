@@ -54,7 +54,7 @@ export default class Home extends React.Component {
     } else {
       this.setState({loading: false})
       console.log(this.data)
-      //console.log(YearsToBuy(this.data))
+      console.log(YearsToBuy(this.data))
       //this.makeGraphData()
       this.data = [] //clear incase they do it again
     }
