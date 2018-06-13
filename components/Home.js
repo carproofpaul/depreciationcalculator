@@ -56,7 +56,10 @@ export default class Home extends React.Component {
                           )
     } else {
       console.log(this.data)
+      this.analysedData = YearsToBuy(this.data)
+      console.log(this.analysedData)
       this.setState({loading: false, visible: true})
+      //this.makeGraphData()
       this.data = [] //clear incase they do it again
     }
   }
@@ -119,7 +122,9 @@ export default class Home extends React.Component {
           onRequestClose={() => this.setState({visible: false})}>
             <Display 
               onClose={() => this.setState({visible: false})}
+              info={{make: this.make, model: this.model}}
               data={this.data} 
+              analysedData={this.analysedData}
             />
         </Modal>
       )
