@@ -52,7 +52,7 @@ export default class Home extends React.Component {
       <View style={styles.container}>
         <ModalSelector
           data={this.state.years}
-          initValue="Select an year"
+          initValue="Select a year"
           keyExtractor= {item => item}
           labelExtractor= {item => item}
           onChange={(label) => {
