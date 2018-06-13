@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export const YearsToBuy = (carValues) => {
+export const YearsToBuy = (carValues, length) => {
     
     if(carValues !== null){
         //create percentages array and return object
