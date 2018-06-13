@@ -28,18 +28,11 @@ export const YearsToBuy = (carValues) => {
             }
         }
 
-        //sort array by percentage and set return object to years with the lowest percentages
+        //sort array by percentage
         percentages = percentages.sort(function(a, b){return a.percentage - b.percentage})
-        for(i=0;i<2;i++) {
-            bestValues[i] = {
-                year: percentages[i].year,
-                price: percentages[i].price,
-                percentage: percentages[i].percentage
-            } 
-        }
 
     return (
-        bestValues
+        percentages
     )
 }
 }
