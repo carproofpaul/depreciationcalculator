@@ -44,6 +44,7 @@ export default class Home extends React.Component {
       makes: [],
       graph: [],
 
+      modelText: 'Select a model',
       loading: false,
       visible: false
     }
@@ -67,7 +68,7 @@ export default class Home extends React.Component {
                             (err) => console.log(err)
                           )
     } else {
-      console.log(this.duration)
+      console.log(this.data)
       this.analysedData = YearsToBuy(this.data, this.duration)
       console.log(this.analysedData)
       this.setState({loading: false, visible: true})
@@ -117,9 +118,12 @@ export default class Home extends React.Component {
     this.setState({loading: true})
     getValidModels(Token._webServiceToken, newest, this.make, (newModels) => {
       getValidModels(Token._webServiceToken, oldest, this.make, (oldModels) => {
+        var models = this.intersect(newModels, oldModels)
+        if(models.length == 0) this.setState({modelText: 'No available models'})
+        else this.setState({modelText: 'Select a model'})
         this.setState({
           loading: false,
-          models: this.intersect(newModels, oldModels)
+          models: models
         })
       }, (err) => this.error(err))
     }, (err) => this.error(err))
@@ -197,7 +201,7 @@ export default class Home extends React.Component {
           labelExtractor= {item => item}
           onChange={(label) => {
             this.oldestYear = label
-            this.getValidMakesForRange(this.newestYear, this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000)
+            this.getValidMakesForRange(this.newestYear, this.oldestYear - this.duration)
           }}
         />
         <ModalSelector
@@ -210,22 +214,22 @@ export default class Home extends React.Component {
           labelExtractor= {item => item}
           onChange={(label) => {
             this.make = label
-            this.getValidModelsForRange(this.newestYear, this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000)
+            this.getValidModelsForRange(this.newestYear, this.oldestYear - this.duration)
           }}
         />
         <ModalSelector
-          disabled={this.state.years.models == 0 ? true : false}
+          disabled={this.state.models.length == 0 ? true : false}
           style={styles.selector}
           selectStyle={{borderWidth: 0}}
           data={this.state.models}
-          initValue="Select a model"
+          initValue={this.state.modelText}
           keyExtractor= {item => item}
           labelExtractor= {item => item}
           onChange={(label) => {
             this.model = label
           }}
         />
-        <TouchableOpacity onPress={() => this.getData(this.newestYear - (this.oldestYear >= 2002 ? this.oldestYear - 2 : 2000))} style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => this.getData(this.newestYear - (this.oldestYear - this.duration))} style={styles.buttonContainer}>
           <Text style={styles.buttonText}>GO</Text>
         </TouchableOpacity>
       </View>
