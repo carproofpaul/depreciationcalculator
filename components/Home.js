@@ -11,6 +11,19 @@ import {Icon, ListItem} from 'react-native-elements';
 
 const WIDTH = 300
 
+const duration = [
+  '1 year',
+  '2 years',
+  '3 years',
+  '4 years',
+  '5 years',
+  '6 years',
+  '7 years',
+  '8 years',
+  '9 years',
+  '10 years'
+]
+
 export default class Home extends React.Component {
 
   constructor(props){
@@ -18,6 +31,7 @@ export default class Home extends React.Component {
 
     this.newestYear = 0
     this.oldestYear = 0
+    this.duration = 0
     this.make = ""
     this.model = ""
 
@@ -36,9 +50,7 @@ export default class Home extends React.Component {
   }
 
   componentWillMount(){
-    getValidYears(Token._webServiceToken, (years) => {
-      this.setState({years: years})
-    })
+
   }
 
   getData(i){
@@ -55,8 +67,8 @@ export default class Home extends React.Component {
                             (err) => console.log(err)
                           )
     } else {
-      console.log(this.data)
-      this.analysedData = YearsToBuy(this.data)
+      console.log(this.duration)
+      this.analysedData = YearsToBuy(this.data, this.duration)
       console.log(this.analysedData)
       this.setState({loading: false, visible: true})
       //this.makeGraphData()
@@ -84,8 +96,9 @@ export default class Home extends React.Component {
   }
 
   makeGraphData(){
-    var arr = this.data.reverse().map(x => ({x: x.year, y: x.price}))
-    this.setState({graph: arr})
+    var arr = this.analysedData.map(x => ({x: x.year, y: x.price}))
+    //this.setState({graph: arr})
+    return arr
   }
 
   getValidMakesForRange(newest, oldest){
@@ -125,6 +138,7 @@ export default class Home extends React.Component {
               info={{make: this.make, model: this.model}}
               data={this.data} 
               analysedData={this.analysedData}
+              graph={this.makeGraphData()}
             />
         </Modal>
       )
@@ -132,8 +146,30 @@ export default class Home extends React.Component {
 
     return (
       <View style={styles.container}>
-        {/*<PureChart width={'100%'} height={200} data={this.state.graph} type='line' />*/}
         <Loader loading={this.state.loading}/>
+        <View style={{margin: 30}}>
+          <Text style={{fontSize: 25, fontWeight: 'bold', textAlign: 'center', color: 'white'}}>
+            DEPRECIATION PREDICTOR
+          </Text>
+          <Text style={{fontSize: 20, textAlign: 'center', color: 'white'}}>
+            Figure out which vehicle year you should buy to avoid the most depreciation
+          </Text>
+        </View>
+        <ModalSelector
+          style={styles.selector}
+          selectStyle={{borderWidth: 0}}
+          data={duration}
+          initValue="How long will you keep this car for?"
+          keyExtractor= {item => item}
+          labelExtractor= {item => item}
+          onChange={(label) => {
+            this.duration = label.split(' ')[0]
+            getValidYears(Token._webServiceToken, (years) => {
+              years.splice(years.length-this.duration, this.duration)
+              this.setState({years: years})
+            })
+          }}
+        />
         <ModalSelector
           disabled={this.state.years.length == 0 ? true : false}
           style={styles.selector}

@@ -1,7 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListItem, Card, Header } from 'react-native-elements';
+import PureChart from 'react-native-pure-chart';
+
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph
+} from 'react-native-chart-kit'
 
 const WIDTH = 300
 
@@ -9,10 +18,7 @@ export default class Display extends React.Component {
 
   constructor(props){
     super(props);
-
-    this.state = {
-
-    }
+    this.list = this.props.analysedData.filter(function(n){ return n != undefined }); 
   }
 
   componentWillMount(){
@@ -24,7 +30,7 @@ export default class Display extends React.Component {
   }
 
   render() {
-    var end = this.props.analysedData.length-1
+    var end = this.list.length-1
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -63,15 +69,15 @@ export default class Display extends React.Component {
         </View>
         
           <Text style={{fontSize: 20, margin: 10, textAlign: 'center', fontWeight: 'bold'}}>
-              To minimize the impact of depreciation, we recommend buying a {this.props.analysedData[0].year} or a {this.props.analysedData[1].year} {this.props.info.make} {this.props.info.model}
+              To minimize the impact of depreciation, we recommend buying a {this.list[0].year} or a {this.list[1].year} {this.props.info.make} {this.props.info.model}
           </Text>
           <Text style={{fontSize: 20, margin: 10, textAlign: 'center', fontWeight: 'bold'}}>
-              Avoid the {this.props.analysedData[end].year} and the {this.props.analysedData[end-1].year} {this.props.info.make} {this.props.info.model}, they will depreciate the most in the next two years.
+              Avoid the {this.list[end].year} and the {this.list[end-1].year} {this.props.info.make} {this.props.info.model}, they will depreciate the most in the next two years.
           </Text>
         </View>
         <View>
           {
-            this.props.analysedData.map((l, i) => (
+            this.list.map((l, i) => (
               <ListItem
                 key={i}
                 title={l.year.toString()}
