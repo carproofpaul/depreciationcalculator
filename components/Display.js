@@ -48,26 +48,25 @@ export default class Display extends React.Component {
         <View style={styles.textContainer}>
 
         <View style={{flex: 1, flexDirection: 'column'}}>
-        <Card titleStyle={styles.cardHeader} title="BEST VALUE">
-        <View>
-          <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.list[0].year}</Text>
-          <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.info.make} {this.props.info.model}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.list[0].price}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after years</Text>
-        </View>
-        </Card>
+          <Card titleStyle={styles.cardHeader} title="BEST VALUE">
+            <View>
+              <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.list[0].year}</Text>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.info.make} {this.props.info.model}</Text>
+              <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.list[0].price}</Text>
+              <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after {this.props.duration} years</Text>
+            </View>
+          </Card>
 
-         <Card titleStyle={styles.cardHeader} title="RUNNER UP">
-        <View>
-          <Text style={{textAlign: 'center', fontSize:25, fontWeight: 'bold'}}>{this.list[1].year}</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text><Icon name="shopping-cart"/> ${this.props.analysedData[1].price}</Text>
-            <Text><Icon name="arrow-down"/> {this.props.analysedData[1].percentage.toFixed(2)}%</Text>
-          </View>
+          <Card titleStyle={styles.cardHeader} title="RUNNER UP">
+            <View>
+              <Text style={{textAlign: 'center', fontSize:25, fontWeight: 'bold'}}>{this.list[1].year}</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text><Icon name="shopping-cart"/> ${this.props.analysedData[1].price}</Text>
+                <Text><Icon name="arrow-down"/> {this.props.analysedData[1].percentage.toFixed(2)}%</Text>
+              </View>
+            </View>
+          </Card>
         </View>
-        </Card>
-        </View>
-        
           <Text style={{fontSize: 20, margin: 10, textAlign: 'center', fontWeight: 'bold'}}>
               To minimize the impact of depreciation, we recommend buying a {this.list[0].year} or a {this.list[1].year} {this.props.info.make} {this.props.info.model}
           </Text>
@@ -82,7 +81,7 @@ export default class Display extends React.Component {
                 key={i}
                 title={l.year.toString()}
                 subtitle={"Market Price: $" + l.price.toFixed(2)}
-                rightTitle={"2-year lost: -" + l.percentage.toFixed(2) + "%"}
+                rightTitle={this.props.duration + "-year lost: -" + l.percentage.toFixed(2) + "%"}
               />
             ))
           }
