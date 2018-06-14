@@ -26,7 +26,14 @@ export default class Display extends React.Component {
   }
 
   info(){
-
+    Alert.alert(
+      'Info',
+      'blah blah big data blah',
+      [
+        {text: 'OK', onPress: () => null},
+      ],
+      { cancelable: true }
+    )
   }
 
   render() {
