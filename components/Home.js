@@ -143,6 +143,7 @@ export default class Home extends React.Component {
               data={this.data} 
               analysedData={this.analysedData}
               graph={this.makeGraphData()}
+              duration={this.duration}
             />
         </Modal>
       )
