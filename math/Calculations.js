@@ -9,13 +9,14 @@ export const YearsToBuy = (carValues, length) => {
         bestValues = []
 
         //Loop through given array and add years, prices, and calculated percentages to new array
-        for(i=0;i<carValues.length-2;i++) {
+        for(i=0;i<carValues.length-length;i++) {
+            sum = parseInt(i)+parseInt(length)
             //if current car price or car 2 years olders is 0 don't include
-            if(carValues[i].price!=0 && carValues[i+2].price!=0 && i+2 < carValues.length) {
+            if(carValues[i].price!=0 && carValues[sum].price!=0 && sum < carValues.length) {
                 percentages[i] = {
                 year : carValues[i].year,
                 price : carValues[i].price,
-                percentage: 100-(carValues[i+2].price/carValues[i].price)*100,
+                percentage: 100-(carValues[sum].price/carValues[i].price)*100,
             }
 
             }

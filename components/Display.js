@@ -53,7 +53,7 @@ export default class Display extends React.Component {
           <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.list[0].year}</Text>
           <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.info.make} {this.props.info.model}</Text>
           <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.list[0].price}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after 2 years</Text>
+          <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after years</Text>
         </View>
         </Card>
 
