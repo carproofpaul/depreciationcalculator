@@ -149,7 +149,7 @@ export default class Home extends React.Component {
         console.log(oldTrims)
         var trims = this.intersect(newTrims, oldTrims)
         if(trims.length == 0) this.setState({trimText: 'No trims available'})
-        else this.setState({trimText: 'Select a Trim'})
+        else this.setState({trimText: 'Select a trim'})
         console.log(trims)
         this.setState({
           loading: false,
@@ -187,7 +187,7 @@ export default class Home extends React.Component {
             DEPRECIATION PREDICTOR
           </Text>
           <Text style={{fontSize: 20, textAlign: 'center', color: 'white'}}>
-            Figure out which vehicle year you should buy to avoid the most depreciation
+            Figure out which vehicle year hold most its value
           </Text>
         </View>
         <ModalSelector
