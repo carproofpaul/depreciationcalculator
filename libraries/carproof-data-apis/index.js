@@ -218,7 +218,6 @@ export const getValidMakes = (token, year, onSuccess, onFailure) => {
             json = JSON.parse(xmlhttp.responseText)
             onSuccess(json)
         } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
-            console.log(xmlhttp);
             onFailure(xmlhttp)
         }
       }).bind(this)
@@ -248,14 +247,14 @@ export const getValidModels = (token, year, make, onSuccess, onFailure) => {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             json = JSON.parse(xmlhttp.responseText)
             onSuccess(json)
-        } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){            
+        } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
             onFailure(xmlhttp)
         }
       }).bind(this)
 }
 
 /**
- * Returns [YEAR, PRICE]
+ * Returns vehicle decode object
  * @param {authentication token} token 
  * @param {year of the vehicle} year 
  * @param {make of the vehicle} make 
@@ -263,16 +262,34 @@ export const getValidModels = (token, year, make, onSuccess, onFailure) => {
  * @param {callback for async result} onSuccess 
  * @param {callback for async failure} onFailure 
  */
-export const getGenericMarketValue = (token, year, make, model, onSuccess, onFailure) => {
+export const getGenericMarketValue = (token, year, make, model, trim ,onSuccess, onFailure) => {
 
     if(token === '' || token === null){
         onFailure('ERROR: Authentication token is invalid')
         return
     }
 
+    var url = "http://apivaluationwebservice.carproof.com/vehicledecode/getgenericmarketvalue?request.vehicleYear="
+        + year +
+        "&request.vehicleMake="
+        + make +
+        "&request.vehicleModel="
+        + model
+        
+    if(trim !== null){
+        url = "http://apivaluationwebservice.carproof.com/vehicledecode/getgenericmarketvalue?request.vehicleYear="
+        + year +
+        "&request.vehicleMake="
+        + make +
+        "&request.vehicleModel="
+        + model +
+        "&request.vehicleTrim="
+        + trim.replace(/ /g, '%')
+    }
+
     var xmlhttp = new XMLHttpRequest();    
     xmlhttp.open("GET", 
-    "http://apivaluationwebservice.carproof.com/vehicledecode/getgenericmarketvalue?request.vehicleYear="+ year +"&request.vehicleMake="+ make +"&request.vehicleModel=" + model,
+    url,
      true);
     xmlhttp.setRequestHeader("webServiceToken", token);
     xmlhttp.send();
@@ -281,6 +298,29 @@ export const getGenericMarketValue = (token, year, make, model, onSuccess, onFai
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             json = JSON.parse(xmlhttp.responseText)
             onSuccess({year: json.VehicleYear, price: json.RetailGenericMarketValue})
+        } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
+            onFailure(xmlhttp)
+        }
+    }).bind(this)
+}
+
+export const getValidVehicleDecodes = (token, year, make, model, onSuccess, onFailure) => {
+
+    if(token === '' || token === null){
+        onFailure('ERROR: Authentication token is invalid')
+        return
+    }
+
+    var xmlhttp = new XMLHttpRequest();    
+    xmlhttp.open("GET", 
+    "http://apivaluationwebservice.carproof.com/vehicledecode/getvalidvehicledecodes?year="+ year +"&make=" + make + "&model=" + model, true);
+    xmlhttp.setRequestHeader("webServiceToken", token);
+    xmlhttp.send();
+
+    xmlhttp.onreadystatechange = (function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            json = JSON.parse(xmlhttp.responseText)
+            onSuccess(json)
         } else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
             onFailure(xmlhttp)
         }

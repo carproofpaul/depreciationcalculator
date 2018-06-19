@@ -18,29 +18,26 @@ export default class Display extends React.Component {
 
   constructor(props){
     super(props);
-    this.list = this.props.analysedData.filter(function(n){ return n != undefined });
-    this.first = [];
-    
+    this.list = this.props.analysedData.filter(function(n){ return n != undefined }); 
   }
-  
 
   componentWillMount(){
 
   }
 
   info(){
-
+    Alert.alert(
+      'Info',
+      'blah blah big data blah',
+      [
+        {text: 'OK', onPress: () => null},
+      ],
+      { cancelable: true }
+    )
   }
 
   render() {
-    
-    
-    for(i=0;i<2;i++) {
-      this.first[i] = this.list.shift()
-    }
     var end = this.list.length-1
-console.log(this.list)
-console.log(this.first)
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -49,48 +46,49 @@ console.log(this.first)
                 size={30}
                 color='black'
                 name='close' />
+            <Icon
+                onPress={() => this.info()}
+                size={30}
+                color='black'
+                name='info' />
         </View>
+        <View style={styles.textContainer}>
 
+        <View style={{flex: 1, flexDirection: 'column'}}>
+          <Card titleStyle={styles.cardHeader} title="BEST VALUE">
+            <View>
+              <Text style={{textAlign: 'center', fontSize:30, fontWeight: 'bold'}}>{this.list[0].year}</Text>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>{this.props.info.make} {this.props.info.model}</Text>
+              <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="shopping-cart"/> Buy now for ${this.list[0].price}</Text>
+              <Text style={{fontSize: 14, textAlign: 'center'}}><Icon name="arrow-down"/> Value will depreciate {this.list[0].percentage.toFixed(2)}% after {this.props.duration} years</Text>
+            </View>
+          </Card>
+
+          <Card titleStyle={styles.cardHeader} title="RUNNER UP">
+            <View>
+              <Text style={{textAlign: 'center', fontSize:25, fontWeight: 'bold'}}>{this.list[1].year}</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text><Icon name="shopping-cart"/> ${this.props.analysedData[1].price}</Text>
+                <Text><Icon name="arrow-down"/> {this.props.analysedData[1].percentage.toFixed(2)}%</Text>
+              </View>
+            </View>
+          </Card>
+        </View>
+          <Text style={{fontSize: 20, margin: 10, textAlign: 'center', fontWeight: 'bold'}}>
+              To minimize the impact of depreciation, we recommend buying a {this.list[0].year} or a {this.list[1].year} {this.props.info.make} {this.props.info.model}
+          </Text>
+          <Text style={{fontSize: 20, margin: 10, textAlign: 'center', fontWeight: 'bold'}}>
+              Avoid the {this.list[end].year} and the {this.list[end-1].year} {this.props.info.make} {this.props.info.model}, they will depreciate the most in the next two years.
+          </Text>
+        </View>
         <View>
-        {
-            this.first.map((l, i) => (
-              i==0 ?
-              <ListItem
-                key={i}
-                title={
-                  <View>
-                    <Text style={{fontSize: 35, color:'#3993EE', textAlign:'center'}}>{l.year.toString()}</Text>
-                    <Text style={{fontSize: 20, color:'black', textAlign:'center'}}>{this.props.info.make} {this.props.info.model}</Text>
-                    </View>}
-                subtitle={
-                  <View>
-                    <Text>We recommend buying this model: it's value depreciates the least over {this.props.duration} years.{"\n"}{"\n"}</Text>
-                    <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-                    <Text style={{fontSize: 18}}><Icon name="arrow-down" size={20}/> {l.percentage.toFixed(1)}%</Text>
-                    <Text style={{fontSize:18}}><Icon name="shopping-cart" size={20}/> ${l.price}</Text>
-                    </View>
-                    </View>}
-                  bottomDivider={true}
-              /> :
-              <ListItem
-                key={i}
-                title={<Text>{l.year.toString()} {this.props.info.make} {this.props.info.model}</Text>}
-                subtitle={<View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-                <Text style={{fontSize: 12}}><Icon name="arrow-down" size={14}/> {l.percentage.toFixed(1)}%</Text>
-                <Text style={{fontSize:12}}><Icon name="shopping-cart" size={14}/> ${l.price}</Text>
-                </View>}
-              />
-            ))
-          }
           {
             this.list.map((l, i) => (
               <ListItem
                 key={i}
-                title={<Text>{l.year.toString()} {this.props.info.make} {this.props.info.model}</Text>}
-                subtitle={<View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-                <Text style={{fontSize: 12}}><Icon name="arrow-down" size={14}/> {l.percentage.toFixed(1)}%</Text>
-                <Text style={{fontSize:12}}><Icon name="shopping-cart" size={14}/> ${l.price}</Text>
-                </View>}
+                title={l.year.toString()}
+                subtitle={"Market Price: $" + l.price.toFixed(2)}
+                rightTitle={this.props.duration + "-year lost: -" + l.percentage.toFixed(2) + "%"}
               />
             ))
           }
